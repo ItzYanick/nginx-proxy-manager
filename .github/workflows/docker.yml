@@ -18,14 +18,16 @@ jobs:
       - name: backend1
         run: docker pull nginxproxymanager/nginx-full:certbot-node
       - name: backend2
-        run: docker run --rm \\
+        run: |
+          docker run --rm \\
 					-v "$(pwd)/backend:/app" \\
 					-v "$(pwd)/global:/app/global" \\
 					-w /app \\
 					nginxproxymanager/nginx-full:certbot-node \\
 					sh -c "yarn install && yarn eslint . && rm -rf node_modules"
       - name: backend3
-        run: docker build --pull --no-cache --squash --compress \\
+        run: |
+          docker build --pull --no-cache --squash --compress \\
 					-t "${IMAGE}:ci-${BUILD_NUMBER}" \\
 					-f docker/Dockerfile \\
 					--build-arg TARGETPLATFORM=linux/amd64 \\
